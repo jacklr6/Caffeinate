@@ -22,7 +22,7 @@ struct SettingsView: View {
                     .transition(.opacity.combined(with: .move(edge: .trailing)))
             }
         }
-        .frame(width: 375, height: 200)
+        .frame(width: 375, height: 225)
         .onDisappear {
             NSApp.setActivationPolicy(.accessory)
         }
@@ -58,6 +58,8 @@ private struct GeneralSettingsView: View {
 }
 
 private struct AboutView: View {
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
+    
     var appVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     }
@@ -68,8 +70,11 @@ private struct AboutView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "cup.and.saucer.fill")
-                .font(.system(size: 65))
+            Image(isDarkMode ? "AppIcon - Dark" : "AppIcon - Default")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 90)
+                .padding(.bottom, -5)
 
             VStack {
                 Text("Caffeinate")
