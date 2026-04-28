@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import AppKit
 
 @main
 struct CaffeinateApp: App {
+    @StateObject private var controller = CaffeinateController()
+    
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("Caffeinate", systemImage: controller.isCaffeinated ? "cup.and.saucer.fill" : "moon.stars.fill") {
+            ContentView(controller: controller)
         }
+        .menuBarExtraStyle(.window)
     }
 }
