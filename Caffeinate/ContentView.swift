@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppKit
 
 struct ContentView: View {
     @ObservedObject var controller: CaffeinateController
@@ -29,21 +30,37 @@ struct ContentView: View {
                 .multilineTextAlignment(.center)
             }
             
-            HStack {
-                Button("Quit") {
-                    NSApplication.shared.terminate(nil)
-                }
-                
+            VStack {
                 Button {
                     withAnimation { controller.toggleCaffeination() }
                 } label: {
-                    Label(
-                        controller.isCaffeinated ? "Stop" : "Start",
-                        systemImage: controller.isCaffeinated ? "pause.fill" : "play.fill"
-                    )
+                    HStack {
+                        Image(systemName: controller.isCaffeinated ? "pause.fill" : "play.fill")
+                        Text(controller.isCaffeinated ? "Stop" : "Start")
+                    }
+                    .font(.system(size: 18, weight: .semibold))
                     .frame(maxWidth: .infinity)
+                    .frame(height: 34)
+                    .contentTransition(.symbolEffect)
                 }
                 .buttonStyle(.glassProminent)
+                
+                HStack {
+                    SettingsLink {
+                        Text("Settings")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        NSApp.activate(ignoringOtherApps: true)
+                    })
+                    
+                    Button(action: {
+                        NSApplication.shared.terminate(nil)
+                    }) {
+                        Text("Quit")
+                            .frame(maxWidth: .infinity)
+                    }
+                }
             }
         }
         .padding(12)
