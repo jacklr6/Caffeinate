@@ -46,8 +46,10 @@ struct ContentView: View {
                 }
                 .buttonStyle(EnergeticButtonStyle(isHovering: isHovering))
                 .onHover { hovering in
-                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                        isHovering = hovering
+                    if !controller.isCaffeinated {
+                        withAnimation(.easeInOut(duration: 0.45)) {
+                            isHovering = hovering
+                        }
                     }
                 }
                 
@@ -112,16 +114,17 @@ struct EnergeticButtonStyle: ButtonStyle {
                 ZStack {
                     if isHovering {
                         BoltGrid()
-                            .transition(.opacity)
+                            .transition(.blurReplace)
                     }
                 }
+                .cornerRadius(10)
             }
             .background(Color.blue.opacity(0.8), in: RoundedRectangle(cornerRadius: 10))
             .overlay {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(.white.opacity(0.1), lineWidth: 0.5)
             }
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
             .foregroundStyle(isDarkMode ? Color.white : Color.white.opacity(0.9))
     }
 }
